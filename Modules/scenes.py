@@ -1,19 +1,16 @@
 from Modules.scene import scene
-from Modules.button import button
+from Modules.button import button,startbutton
 from Modules.img import img
 from Modules.background import background
 import pygame
 
-r = pygame.Surface((800,50))
-g = pygame.Surface((800,50))
-b = pygame.Surface((800,50))
-r.fill((255,0,0))
-g.fill((0,255,0))
-b.fill((0,0,255))
+mainImg = pygame.image.load('Assets\\startMenuBG.png')
+playButton = pygame.image.load('Assets\\play.png')
+playHover = pygame.image.load('Assets\\playHover.png')
 
 scenes = {
-    'Main' : scene([img(r),background((10,10,10)),button( pygame.Rect((0,0,800,50)),r,g,b )]),
-    'Secondary' : scene([background((255,255,255))])
+    'Main' : scene([img(mainImg),startbutton(playButton,(400,300),playHover)]),
+    'Level Select' : scene([background((255,255,255))])
 }
 
 currentScene = scenes['Main']
