@@ -13,7 +13,6 @@ r = pygame.Surface((50,50))
 r.fill((255,0,0))
 scenes = {'Main':scene([img(r),background((0,0,0))])}
 
-
 currentScene = scenes['Main']
 
 def main(args):
