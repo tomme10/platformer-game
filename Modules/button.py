@@ -8,7 +8,7 @@ class button(clickable):
         self.rect.center = pos
         self.surf = surf
         self.normal = self.surf.copy()
-        self.hovering = hovering.copy()
+        self.hovering = hovering
         self.clicking = clicking
 
     def onHold(self,objects):
@@ -31,3 +31,7 @@ class button(clickable):
 class startbutton(button):
     def onClick(self,objects):
         s.currentScene = s.scenes['Level Select']
+
+class returnButton(button):
+    def onClick(self,objects):
+        s.currentScene = s.scenes['Main']
