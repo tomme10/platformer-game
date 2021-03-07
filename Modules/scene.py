@@ -14,3 +14,7 @@ class scene:
     def draw(self,root):
         for obj in sorted(self.objects,key = lambda obj:obj.drawOrder):
             obj.draw(root)
+
+    def reset(self):
+        for obj in self.objects:
+            obj.reset()

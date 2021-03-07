@@ -1,7 +1,5 @@
 import pygame
-from Modules.scene import scene
-from Modules.img import img
-from Modules.background import background
+import Modules.scenes as s
 import sys
 
 dis = [800,600]
@@ -11,9 +9,6 @@ FPS = 60
 
 r = pygame.Surface((50,50))
 r.fill((255,0,0))
-scenes = {'Main':scene([img(r),background((0,0,0))])}
-
-currentScene = scenes['Main']
 
 def main(args):
 
@@ -27,9 +22,9 @@ def main(args):
                 if event.key == pygame.K_ESCAPE:
                     return
 
-        currentScene.update(dtime)
+        s.currentScene.update(dtime)
 
-        currentScene.draw(root)
+        s.currentScene.draw(root)
 
         pygame.display.update()
         dtime = clock.tick(FPS)

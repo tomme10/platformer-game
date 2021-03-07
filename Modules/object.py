@@ -1,5 +1,4 @@
 
-
 class object:
     drawOrder = 0
     updateOrder = 0
