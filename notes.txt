@@ -1,0 +1,26 @@
+main func:
+calls update and draw for the current scene
+
+scene:
+holds a list of objects
+obj[] objects
+
+object:
+drawOrder - int
+updateOrder - int
+reset - function
+update(dtime,objs)
+draw(root)
+
+
+objects needed:
+player
+wall
+portal
+img
+button
+
+scenes:
+all the levels
+main menu
+level select
