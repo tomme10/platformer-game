@@ -35,3 +35,11 @@ class startbutton(button):
 class returnButton(button):
     def onClick(self,objects):
         s.currentScene = s.scenes['Main']
+
+class levelButton(button):
+    def __init__(self,surf,pos,level,hovering = None,clicking = None):
+        super().__init__(surf,pos,hovering,clicking)
+        self.level = level
+
+    def onClick(self,objects):
+        s.currentScene = s.scenes[f'level{self.level}']

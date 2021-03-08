@@ -3,7 +3,7 @@ import pygame
 
 
 class clickable(object):
-    prevClick = False
+    prevClick = True
 
     def __init__(self,rect):
         self.rect = rect.copy()
