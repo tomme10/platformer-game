@@ -50,15 +50,14 @@ def loadLevel(num):
     p = player(400,300)
 
     for obj in data.objects:
-        if obj.type != '':
+        if obj.type != None:
             pass
         else:
-            pygame.draw.rect(preRender,(95,205,228),(obj.x,obj.y,obj.w,obj.h),5)
-            objects.append(wall(pygame.Rect(obj.x,obj.y,obj.w,obj.h)))
+            objects.append(wall(pygame.Rect((obj.x,obj.y),(obj.width,obj.height))))
 
 
     scenes[f'level{num}'] = scene([bg,p]+objects)
 
 loadAssets()
 
-currentScene = scenes['Main']
+currentScene = scenes['level1']

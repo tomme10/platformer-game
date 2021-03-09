@@ -12,7 +12,7 @@ r.fill((255,0,0))
 
 def main(args):
 
-    dtime = 0
+    dtime = 1
 
     while True:
         for event in pygame.event.get():
