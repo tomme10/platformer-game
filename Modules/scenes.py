@@ -1,7 +1,9 @@
 from Modules.scene import scene
-from Modules.button import button,startbutton,returnButton,levelButton
+from Modules.button import button,startbutton,returnButton,levelButton,testButton
 from Modules.img import img
 from Modules.background import background
+from Modules.wall import wall
+from Modules.player import player
 import pygame
 import pytmx
 
@@ -32,34 +34,30 @@ def loadAssets():
     scenes['Main'] = scene([img(mainImg),startbutton(playButton,(400,300),playHover)])
     scenes['Level Select'] = scene([img(levelImg),returnButton(returnArrow,(50,50))]+buttons)
 
-    scenes['level1'] = scene([background((100,100,100))])
+    loadLevel(1)
 
 def loadLevel(num):
     global scenes
 
-    data = pytmx.load_pygame('Assets\\maps\\level1.tmx')
+    data = pytmx.load_pygame(f'Assets\\maps\\level{num}.tmx')
+    image = pygame.image.load(f'Assets\\maps\\level{num}.png')
 
-    rects = []
+    objects = []
 
-    preRender = pygame.Surface((800,600))
-    preRender.fill((0,0,0))
-    postProcessing = pygame.Surface((800,600))
-    postProcessing.fill((0,0,0))
+    bg = img(image)
+    bg.drawOrder = -1
 
-    for obj in data.objects():
+    p = player(400,300)
+
+    for obj in data.objects:
         if obj.type != '':
             pass
         else:
             pygame.draw.rect(preRender,(95,205,228),(obj.x,obj.y,obj.w,obj.h),5)
-            rects.append(pygame.Rect(obj.x,obj.y,obj.w,obj.h))
+            objects.append(wall(pygame.Rect(obj.x,obj.y,obj.w,obj.h)))
 
-    for x in range(800):
-        for y in range(600):
-            
 
-    
-            
-
+    scenes[f'level{num}'] = scene([bg,p]+objects)
 
 loadAssets()
 

@@ -3,7 +3,8 @@ import pygame
 
 
 class clickable(object):
-    prevClick = True
+    prevClick = False
+    frame = False
 
     def __init__(self,rect):
         self.rect = rect.copy()
@@ -15,7 +16,10 @@ class clickable(object):
         if self.rect.collidepoint(mpos):
             if pressed:
                 if not self.prevClick:
-                    self.onClick(objects)
+                    if self.frame:
+                        self.onClick(objects)
+                    else:
+                        self.prevClick = True
                     self.prevClick = True
                 self.onHold(objects)
             else:
@@ -26,6 +30,9 @@ class clickable(object):
         
         else:
             self.onNothing(objects)
+
+        if not self.frame:
+            self.frame = True
 
     def onClick(self,objects):pass
     def onHover(self,objects):pass
