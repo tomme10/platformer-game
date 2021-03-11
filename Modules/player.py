@@ -44,10 +44,6 @@ class player(object):
             self.vel[0] += 150
         if keys[pygame.K_a]:
             self.vel[0] -= 150
-        if keys[pygame.K_w]:
-            self.vel[1] -= 10
-        if keys[pygame.K_s]:
-            self.vel[1] += 10
         if keys[pygame.K_q]:
             self.angle -= radians(5)
         if keys[pygame.K_e]:
@@ -66,6 +62,7 @@ class player(object):
 
         # idk why but this sort of primes the collision algorithm, if i take it out, everything goes wrong
         self.collide(0,-1000000,colliders)
+        self.collide(-10000000,0,colliders)
 
         if self.collide(vel[0],vel[1],colliders):
             while self.collide(vel[0],0,colliders):
@@ -106,8 +103,6 @@ class player(object):
         self.x += vel[0]
         self.y += vel[1]
 
-        print(self.collide(0,0,colliders))
-
         self.surf = pygame.transform.rotate(self.orisurf,180-degrees(self.angle))
         self.rect = self.surf.get_rect()
         self.rect.center = (self.x,self.y)
@@ -121,13 +116,13 @@ class player(object):
 
     def collide(self,x,y,colliders):
 
-        vel = np.array([x*cos(self.angle)-y*sin(self.angle),x*sin(self.angle)+y*cos(self.angle)])
+        v = np.array([x*cos(self.angle)-y*sin(self.angle),x*sin(self.angle)+y*cos(self.angle)])
 
         pts = self.pts.copy()
 
-        for point in pts:
-            point[0] += vel[0]
-            point[1] += vel[1]
+        for i in range(len(pts)):
+            pts[i][0] += v[0]
+            pts[i][1] += v[1]
 
         for collider in colliders:
             if rect2rect(pts,collider.pts):
