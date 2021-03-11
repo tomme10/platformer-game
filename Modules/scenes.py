@@ -53,7 +53,7 @@ def loadLevel(num):
         if obj.type != None:
             pass
         else:
-            objects.append(wall(pygame.Rect((obj.x,obj.y),(obj.width,obj.height))))
+            objects.append(wall([[obj.x,obj.y],[obj.x+obj.width,obj.y],[obj.x+obj.width,obj.y+obj.height],[obj.x,obj.y+obj.height]]))
 
 
     scenes[f'level{num}'] = scene([bg,p]+objects)

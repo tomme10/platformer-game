@@ -36,30 +36,36 @@ class player(object):
 
         colliders = [obj for obj in objects if obj.collisions and obj != self]
 
-        onFloor = self.collide(0,0,colliders)
+        onFloor = self.collide(0,2,colliders)
+
+        self.vel[0] = 0
 
         if keys[pygame.K_d]:
-            self.vel[0] += 10
+            self.vel[0] += 150
         if keys[pygame.K_a]:
-            self.vel[0] -= 10
+            self.vel[0] -= 150
         if keys[pygame.K_w]:
             self.vel[1] -= 10
         if keys[pygame.K_s]:
             self.vel[1] += 10
         if keys[pygame.K_q]:
-            self.angle += radians(1)
+            self.angle -= radians(5)
         if keys[pygame.K_e]:
-            self.angle -= radians(1)
+            self.angle += radians(5)
 
         if not onFloor:
             self.vel[1] += 10
-        elif self.vel[1] > 0:
-            print(onFloor)
-            self.vel[1] = 0
+        else:
+            if self.vel[1] > 0:
+                self.vel[1] = 0
+            
+            if keys[pygame.K_SPACE]:
+                self.vel[1] = -500
 
         vel = [self.vel[0]*(dtime/1000),self.vel[1]*(dtime/1000)]
 
-        print(self.collide(1,0,colliders),self.collide(-10000,0,colliders))
+        # idk why but this sort of primes the collision algorithm, if i take it out, everything goes wrong
+        self.collide(0,-1000000,colliders)
 
         if self.collide(vel[0],vel[1],colliders):
             while self.collide(vel[0],0,colliders):
@@ -69,17 +75,9 @@ class player(object):
                     vel[0] += 1
                 else:
                     vel[0] = 0
-
-                    if not self.collide(vel[0],-1*vel[0],colliders):
-                        off = 0
-                        while not self.collide(vel[0],-1*vel[0]-off,colliders):
-                            off += 1
-                        
-                        vel[1] = -1*vel[0]-off
-
                     break
 
-            while self.collide(0,vel[1],colliders):
+            while self.collide(vel[0],vel[1],colliders):
                 if vel[1] > 1:
                     vel[1] -= 1
                 elif vel[1] < -1:
@@ -108,7 +106,9 @@ class player(object):
         self.x += vel[0]
         self.y += vel[1]
 
-        self.surf = pygame.transform.rotate(self.orisurf,degrees(self.angle))
+        print(self.collide(0,0,colliders))
+
+        self.surf = pygame.transform.rotate(self.orisurf,180-degrees(self.angle))
         self.rect = self.surf.get_rect()
         self.rect.center = (self.x,self.y)
 

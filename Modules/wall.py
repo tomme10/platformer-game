@@ -6,8 +6,8 @@ class wall(object):
     collisions = True
     drawOrder = 1
 
-    def __init__(self,rect):
-        self.pts = [rect.topleft,rect.topright,rect.bottomright,rect.bottomleft]
+    def __init__(self,pts):
+        self.pts = pts.copy()
 
     def collision(self,rect):
         return self.rect.colliderect(rect)
