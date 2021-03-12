@@ -35,6 +35,7 @@ def loadAssets():
     scenes['Level Select'] = scene([img(levelImg),returnButton(returnArrow,(50,50))]+buttons)
 
     loadLevel(1)
+    loadLevel(2)
 
 def loadLevel(num):
     global scenes
@@ -53,11 +54,11 @@ def loadLevel(num):
         if obj.type != None:
             pass
         else:
-            objects.append(wall([[obj.x,obj.y],[obj.x+obj.width,obj.y],[obj.x+obj.width,obj.y+obj.height],[obj.x,obj.y+obj.height]]))
+            objects.append(wall(list(obj.points)))
 
 
     scenes[f'level{num}'] = scene([bg,p]+objects)
 
 loadAssets()
 
-currentScene = scenes['level1']
+currentScene = scenes['Main']

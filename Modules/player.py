@@ -22,6 +22,9 @@ class player(object):
         self.x,self.y = x,y
         self.vel = [0,0]
 
+        self.rect = self.surf.get_rect()
+        self.rect.center = [self.x,self.y]
+
         self.pts = [[self.x+12.5,self.y+12.5],[self.x-12.5,self.y+12.5],[self.x-12.5,self.y-12.5],[self.x+12.5,self.y-12.5]]
         for i in range(len(self.pts)):
             pt = [self.pts[i][0]-self.x,self.pts[i][1]-self.y]
@@ -33,47 +36,49 @@ class player(object):
 
     def update(self,dtime,objects):
         keys = pygame.key.get_pressed()
-
         colliders = [obj for obj in objects if obj.collisions and obj != self]
 
-        onFloor = self.collide(0,2,colliders)
-
+        # keys and movement
         self.vel[0] = 0
-
         if keys[pygame.K_d]:
-            self.vel[0] += 150
+            self.vel[0] += 175
         if keys[pygame.K_a]:
-            self.vel[0] -= 150
+            self.vel[0] -= 175
         if keys[pygame.K_q]:
             self.angle -= radians(5)
         if keys[pygame.K_e]:
             self.angle += radians(5)
 
-        if not onFloor:
-            self.vel[1] += 10
-        else:
-            if self.vel[1] > 0:
-                self.vel[1] = 0
-            
-            if keys[pygame.K_SPACE]:
-                self.vel[1] = -500
+        if self.collide(0,1,colliders) and keys[pygame.K_SPACE]:
+            self.vel[1] -= 500
 
+        self.vel[1] += 10
+
+        #self.vel[1] += 10
+    
+        # vel dampening
         vel = [self.vel[0]*(dtime/1000),self.vel[1]*(dtime/1000)]
 
-        # idk why but this sort of primes the collision algorithm, if i take it out, everything goes wrong
-        self.collide(0,-1000000,colliders)
-        self.collide(-10000000,0,colliders)
+        climb = False
 
-        if self.collide(vel[0],vel[1],colliders):
-            while self.collide(vel[0],0,colliders):
-                if vel[0] > 1:
-                    vel[0] -= 1
-                elif vel[0] < -1:
-                    vel[0] += 1
-                else:
-                    vel[0] = 0
-                    break
+        if self.collide(vel[0],0,colliders):
+            if not self.collide(vel[0],-abs(vel[0]),colliders):
+                climb = True
+                while self.collide(vel[0],vel[1],colliders):
+                    vel[1] -= 1
+            
+            else:
+                while self.collide(vel[0],0,colliders):
+                    if vel[0] > 1:
+                        vel[0] -= 1
+                    elif vel[0] < -1:
+                        vel[0] += 1
+                    else:
+                        vel[0] = 0
+                        break
 
+
+        if not climb:
             while self.collide(vel[0],vel[1],colliders):
                 if vel[1] > 1:
                     vel[1] -= 1
@@ -83,30 +88,20 @@ class player(object):
                     vel[1] = 0
                     break
 
-        #print(self.collide(vel[0],0,colliders),self.collide(0,vel[1],colliders),self.collide(vel[0],vel[1],colliders))
-
-        x,y = vel
-        #if vel[0] > 0:
-        #    self.vel[0] = floor(vel[0]/(dtime/1000))
-        #else:
-        #    self.vel[0] = ceil(vel[0]/(dtime/1000))
-
-        #if vel[1] > 0:
-        #    self.vel[1] = floor(vel[1]/(dtime/1000))
-        #else:
-        #    self.vel[1] = ceil(vel[1]/(dtime/1000))
-
         self.vel = [vel[0]/(dtime/1000),vel[1]/(dtime/1000)]
+        # rotate vel
+        v = [vel[0]*cos(self.angle)-vel[1]*sin(self.angle),vel[0]*sin(self.angle)+vel[1]*cos(self.angle)]
 
-        vel = np.array([x*cos(self.angle)-y*sin(self.angle),x*sin(self.angle)+y*cos(self.angle)])
+        # apply vel
+        self.x += v[0]
+        self.y += v[1]
 
-        self.x += vel[0]
-        self.y += vel[1]
-
+        # rotate surf, + create/move rect
         self.surf = pygame.transform.rotate(self.orisurf,180-degrees(self.angle))
         self.rect = self.surf.get_rect()
         self.rect.center = (self.x,self.y)
 
+        # update points
         self.pts = [[self.x+12.5,self.y+12.5],[self.x-12.5,self.y+12.5],[self.x-12.5,self.y-12.5],[self.x+12.5,self.y-12.5]]
         for i in range(len(self.pts)):
             pt = [self.pts[i][0]-self.x,self.pts[i][1]-self.y]
@@ -114,20 +109,26 @@ class player(object):
             self.pts[i][0] += self.x
             self.pts[i][1] += self.y
 
+
     def collide(self,x,y,colliders):
 
-        v = np.array([x*cos(self.angle)-y*sin(self.angle),x*sin(self.angle)+y*cos(self.angle)])
+        v = [x*cos(self.angle)-y*sin(self.angle),x*sin(self.angle)+y*cos(self.angle)]
 
-        pts = self.pts.copy()
+        points = []
+        for point in self.pts:
+            points.append([point[0],point[1]])
+        
 
-        for i in range(len(pts)):
-            pts[i][0] += v[0]
-            pts[i][1] += v[1]
+        for point in points:
+            point[0] += v[0]
+            point[1] += v[1]
 
         for collider in colliders:
-            if rect2rect(pts,collider.pts):
+            if rect2rect(points,collider.pts):
+                del points,v,x,y
                 return True
         
+        del points,v,x,y
         return False
 
     def draw(self,root):

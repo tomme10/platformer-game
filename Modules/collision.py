@@ -1,13 +1,20 @@
-import numpy as np
 
-def createAxis(p1,p2):
-    return [p2[1]-p1[1],p1[0]-p2[0]]
+createAxis = lambda p1,p2:[p2[1]-p1[1],p1[0]-p2[0]]
 
 def rect2rect(a,b):
 
-    axes = [createAxis(a[0],a[1]),createAxis(a[1],a[2]),createAxis(b[0],b[1]),createAxis(b[1],b[2])]
+    axes = []
+
+    for i in range(4):
+        axes.append(createAxis(a[i%len(a)],a[ (i+1)%len(a) ]))
+    for i in range(4):
+        axes.append(createAxis(b[i%len(b)],b[ (i+1)%len(b) ]))
+
+    collision = True
 
     for axis in axes:
+
+        projected = 0
 
         mina = None
         minb = None
@@ -29,6 +36,7 @@ def rect2rect(a,b):
                 maxb = projected
 
         if maxa < minb or maxb < mina:
-            return False
+            collision = False
+            break
 
-    return True
+    return collision

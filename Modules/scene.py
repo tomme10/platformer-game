@@ -29,8 +29,9 @@ class levelScene(scene):
     def update(self,dtime):
         super().update(dtime)
         for obj in self.objects:
-            if type(obj).__name__ == 'flag' and obj.touching = True:
-                if self.next:
-                    currentScene = scenes[f'level{self.level+1}']
-                else:
-                    currentScene = scenes[f'main']
+            if type(obj).__name__ == 'flag':
+                    if obj.touching:
+                        if self.next:
+                            currentScene = scenes[f'levesl{self.level+1}']
+                        else:
+                            currentScene = scenes[f'main']
