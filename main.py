@@ -11,7 +11,7 @@ FPS = 60
 
 r = pygame.Surface((50,50))
 r.fill((255,0,0))
- 
+
 font = pygame.font.SysFont('SansSherif', 18)
 
 def main(args):
@@ -32,7 +32,7 @@ def main(args):
                     return
                 elif event.key == pygame.K_p:
                     fpsShown = not fpsShown
-
+           
         s.currentScene.update(dtime)
 
         s.currentScene.draw(root)

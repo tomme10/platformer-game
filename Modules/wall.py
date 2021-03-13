@@ -13,5 +13,5 @@ class wall(object):
         return self.rect.colliderect(rect)
     
     def draw(self,root):
-        pygame.draw.polygon(root,(0,0,255),self.pts,2)
+        #pygame.draw.polygon(root,(0,0,255),self.pts,2)
         pass

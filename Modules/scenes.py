@@ -4,11 +4,62 @@ from Modules.img import img
 from Modules.background import background
 from Modules.wall import wall
 from Modules.player import player
+from Modules.flag import flag
 import pygame
 import pytmx
 
 scenes = {
 }
+currentScene = None
+
+pygame.init()
+rt = pygame.display.set_mode((800,600))
+
+
+# this has to be in here otherwise i would get import errors
+class levelScene(scene):
+    def __init__(self,level,objects = [],next = True):
+        super().__init__(objects)
+        self.level = level
+        self.next = next
+
+        self.blackOut = pygame.Surface((800,1000))
+        pygame.draw.rect(self.blackOut,(0,0,255),(0,0,800,600),10)
+        self.blackOuty = 0
+        self.ended = False
+        self.time = 1
+
+
+    def update(self,dtime):
+        global scenes,currentScene
+
+        if not self.ended:        
+            super().update(dtime)
+            for obj in self.objects:
+                if type(obj).__name__ == 'flag':
+                    if obj.touching:
+                        self.ended = True
+
+        else:
+            super().update(min(20,10/dtime))
+            self.time += dtime
+            self.blackOuty = (800/1000)*self.time
+
+            if self.time > 1000:
+                if self.next:
+                    currentScene = scenes[f'level{self.level+1}']
+                else:
+                    currentScene = scenes[f'Main']
+
+
+    def draw(self,root):
+        super().draw(root)
+        if self.ended:
+            root.blit(self.blackOut,(0,self.blackOuty-1000))
+
+
+
+
 
 def loadAssets():
     global scenes
@@ -36,6 +87,7 @@ def loadAssets():
 
     loadLevel(1)
     loadLevel(2)
+    loadLevel(3)
 
 def loadLevel(num):
     global scenes
@@ -51,13 +103,16 @@ def loadLevel(num):
     p = player(400,300)
 
     for obj in data.objects:
-        if obj.type != None:
-            pass
-        else:
+        if obj.type == 'flag':
+            objects.append(flag(obj.x,obj.y,obj.rotation))
+            print('flag')
+        elif obj.type == 'img':
+            objects.append(img(obj.image,(obj.x+obj.width//2,obj.y+obj.height//2)))
+        elif obj.type == None:
             objects.append(wall(list(obj.points)))
 
 
-    scenes[f'level{num}'] = scene([bg,p]+objects)
+    scenes[f'level{num}'] = levelScene(num,[bg,p]+objects)
 
 loadAssets()
 

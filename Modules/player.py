@@ -14,13 +14,18 @@ class player(object):
     collisions = True
     angle = 0
 
-    def __init__(self,x,y):
+    drawOrder = 2
+
+    def __init__(self,x,y,angle = 0):
         self.orisurf = pygame.Surface((25,25))
         self.orisurf.fill((255,0,0))
         self.orisurf.set_colorkey((0,0,0,0))
         self.surf = self.orisurf.copy()
         self.x,self.y = x,y
         self.vel = [0,0]
+
+        self.oripos = [self.x,self.y]
+        self.oriAngle = angle
 
         self.rect = self.surf.get_rect()
         self.rect.center = [self.x,self.y]
@@ -32,7 +37,7 @@ class player(object):
             self.pts[i][0] += self.x
             self.pts[i][1] += self.y
 
-        self.angle = 0
+        self.angle = angle
 
     def update(self,dtime,objects):
         keys = pygame.key.get_pressed()
@@ -50,7 +55,7 @@ class player(object):
             self.angle += radians(5)
 
         if self.collide(0,1,colliders) and keys[pygame.K_SPACE]:
-            self.vel[1] -= 500
+            self.vel[1] = -500
 
         self.vel[1] += 10
 
@@ -96,6 +101,9 @@ class player(object):
         self.x += v[0]
         self.y += v[1]
 
+        #if climb and self.vel[1] < 0:
+        #    self.vel[1] = 0
+
         # rotate surf, + create/move rect
         self.surf = pygame.transform.rotate(self.orisurf,180-degrees(self.angle))
         self.rect = self.surf.get_rect()
@@ -134,3 +142,15 @@ class player(object):
     def draw(self,root):
         root.blit(self.surf,self.rect)
         #pygame.draw.polygon(root,(255,255,0),self.pts,3)
+
+    def reset(self):
+        self.x,self.y = self.oripos.copy()
+        self.angle = self.oriAngle
+
+        self.pts = [[self.x+12.5,self.y+12.5],[self.x-12.5,self.y+12.5],[self.x-12.5,self.y-12.5],[self.x+12.5,self.y-12.5]]
+        for i in range(len(self.pts)):
+            pt = [self.pts[i][0]-self.x,self.pts[i][1]-self.y]
+            self.pts[i] = [pt[0]*cos(self.angle)-pt[1]*sin(self.angle) , pt[0]*sin(self.angle)+pt[1]*cos(self.angle)]
+            self.pts[i][0] += self.x
+            self.pts[i][1] += self.y
+
