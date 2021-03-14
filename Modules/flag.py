@@ -12,7 +12,8 @@ class flag(object):
         self.cx = x+20
         self.cy = y+20
 
-        self.surf = pygame.image.load('Assets\\flag.png')
+        self.surf = pygame.image.load('Assets\\portal\\flag.png')
+        self.surf = pygame.transform.rotate(self.surf,-angle)
         self.surf.set_colorkey((0,0,0))
 
     def update(self,dtime,objects):

@@ -4,6 +4,8 @@ import pygame
 from math import sin,cos,sqrt,atan2,radians
 pygame.init()
 
+root = pygame.display.set_mode((800,600))
+
 color = (203,219,252)
 
 def main(args):

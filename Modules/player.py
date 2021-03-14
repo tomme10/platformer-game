@@ -147,6 +147,8 @@ class player(object):
         self.x,self.y = self.oripos.copy()
         self.angle = self.oriAngle
 
+        self.vel = [0,0]
+
         self.pts = [[self.x+12.5,self.y+12.5],[self.x-12.5,self.y+12.5],[self.x-12.5,self.y-12.5],[self.x+12.5,self.y-12.5]]
         for i in range(len(self.pts)):
             pt = [self.pts[i][0]-self.x,self.pts[i][1]-self.y]

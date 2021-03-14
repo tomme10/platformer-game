@@ -12,6 +12,9 @@ FPS = 60
 r = pygame.Surface((50,50))
 r.fill((255,0,0))
 
+color1 = (203,219,252)
+color2 = (255, 229, 213)
+
 font = pygame.font.SysFont('SansSherif', 18)
 
 def main(args):

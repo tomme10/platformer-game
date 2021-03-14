@@ -17,28 +17,28 @@ class clickable(object):
             if pressed:
                 if not self.prevClick:
                     if self.time > 10:
-                        self.onClick(objects)
+                        self.onClick(dtime,objects)
                     else:
                         self.prevClick = True
                     self.prevClick = True
-                self.onHold(objects)
+                self.onHold(dtime,objects)
             else:
                 if self.prevClick:
-                    self.onRelease(objects)
+                    self.onRelease(dtime,objects)
                     self.prevClick = False
-                self.onHover(objects)
+                self.onHover(dtime,objects)
         
         else:
-            self.onNothing(objects)
+            self.onNothing(dtime,objects)
 
         if self.time < 10:
             self.time += dtime
 
-    def onClick(self,objects):pass
-    def onHover(self,objects):pass
-    def onHold(self,objects):pass
-    def onRelease(self,objects):pass
-    def onNothing(self,objects):pass
+    def onClick(self,dtime,objects):pass
+    def onHover(self,dtime,objects):pass
+    def onHold(self,dtime,objects):pass
+    def onRelease(self,dtime,objects):pass
+    def onNothing(self,dtime,objects):pass
 
     def reset(self):
         self.time = 0

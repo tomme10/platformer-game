@@ -1,5 +1,6 @@
 from Modules.clickable import clickable
 import Modules.scenes as s
+import pygame
 
 class button(clickable):
 
@@ -11,44 +12,85 @@ class button(clickable):
         self.hovering = hovering
         self.clicking = clicking
 
-    def onHold(self,objects):
+    def onHold(self,dtime,objects):
         if self.clicking:
             self.surf = self.clicking.copy()
 
-    def onHover(self,objects):
+    def onHover(self,dtime,objects):
         if self.hovering:
             self.surf = self.hovering.copy()
 
-    def onNothing(self,objects):
+    def onNothing(self,dtime,bjects):
         self.surf = self.normal.copy()
 
-    def onClick(self,objects):
+    def onClick(self,dtime,objects):
         pass
 
     def draw(self,root):
         root.blit(self.surf,self.rect)
 
 class startbutton(button):
-    def onClick(self,objects):
-        s.currentScene = s.scenes['Level Select']
+    def onClick(self,dtime,objects):
+        s.changeScene(s.scenes['Level Select'])
 
 class returnButton(button):
-    def onClick(self,objects):
-        s.currentScene = s.scenes['Main']
+    def onClick(self,dtime,objects):
+        s.changeScene(s.scenes['Main'])
 
 class levelButton(button):
 
-    def __init__(self,surf,pos,level,hovering = None,clicking = None):
-        super().__init__(surf,pos,hovering,clicking)
+    def __init__(self,pos,level):
         self.level = level
+        self.locked =  self.level > s.level
+        spriteSheet = pygame.image.load('Assets\\levelicons.png')
 
-    def onClick(self,objects):
-        s.currentScene = s.scenes[f'level{self.level}']
+        self.normal = pygame.Surface((75,75))
+        self.normal.blit(spriteSheet,(-75*(level-1),0))
+
+        self.hoverFrames = []
+        self.index = 0
+        for i in range(4):
+            surf = pygame.Surface((75,75))
+            surf.blit(spriteSheet,(-75*(level-1),-(75+i*75)))
+            self.hoverFrames.append(surf.copy())
+        self.animTime = 0
+
+        self.lockedSurf = pygame.Surface((75,75))
+        self.lockedSurf.blit(spriteSheet,(-75*(level-1),-75*5))
+        
+        if self.locked:
+            self.surf = self.lockedSurf.copy()
+        else:
+            self.surf = self.normal.copy()
+
+        self.rect = self.surf.get_rect()
+        self.rect.center = pos
+
+    def onHold(self,dtime,objects):
+        pass
+
+    def onNothing(self,dtime,objects):
+        if not self.locked:
+            self.surf = self.normal.copy()
+
+    def onHover(self,dtime,objects):
+        if not self.locked:
+            self.surf = self.hoverFrames[self.index].copy()
+            self.animTime += dtime
+
+            if self.animTime > 100:
+                self.animTime = 0
+                self.index += 1
+                self.index %= len(self.hoverFrames)
+
+    def onClick(self,dtime,objects):
+        if not self.locked:
+            s.changeScene(s.scenes[f'level{self.level}'])
 
 class testButton(button):
 
-    def onClick(self,objects):
+    def onClick(self,dtime,objects):
         print('click')
 
-    def onRelease(self,objects):
+    def onRelease(self,dtime,objects):
         print('release')
