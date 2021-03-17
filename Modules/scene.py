@@ -1,4 +1,5 @@
 import pygame
+import Modules.scenes as s
 
 
 class scene:
@@ -20,25 +21,30 @@ class scene:
             obj.reset()
 
 
-
 class levelScene(scene):
     def __init__(self,level,objects = [],next = True):
         super().__init__(objects)
         self.level = level
         self.next = next
 
-        self.blackOut = pygame.image.load('Assets\\transition.png')
-        self.blackOuty = 600
+        self.transitionFrames = [pygame.image.load(f'Assets\\corruption\\transition{i+1}.png') for i in range(6)]
+        self.transitionY = 0
+        self.index = 0
         self.ended = False
         self.endTime = 1
 
+        self.fadeOut = pygame.Surface((800,600))
+        self.fadeOut.fill((0,0,0))
+        self.fadeOut.set_alpha(0)
         self.started = True
-        self.startTime = 1
-
+        self.startTime = 1        
 
 
     def update(self,dtime):
         global scenes,currentScene
+
+        if s.level < self.level:
+            s.level += 1
 
         if not self.ended and not self.started:        
             super().update(dtime)
@@ -47,31 +53,38 @@ class levelScene(scene):
                     if obj.touching:
                         self.ended = True
 
+                if type(obj).__name__ == 'resetButton':
+                    if obj.clicked:
+                        self.reset()
+
         elif self.ended:
             super().update(0.1)
             self.endTime += dtime
-            self.blackOuty = (700/1500)*self.endTime
+            self.index = (self.endTime//10)%len(self.transitionFrames)
+            self.transitionY = (700/1500)*self.endTime
 
             if self.endTime > 1500:
                 if self.next:
-                    changeScene(scenes[f'level{self.level+1}'])
+                    s.changeScene(s.scenes[f'level{self.level+1}'])
                 else:
-                    changeScene(scenes[f'Main'])
+                    s.changeScene(s.scenes[f'Main'])
 
         elif self.started:
             super().update(0.1)
             self.startTime += dtime
-            self.blackOuty = 700-(700/1500)*self.startTime
+            self.fadeOut.set_alpha(255-(255/750)*self.startTime)
 
-            if self.startTime > 1500:
+            if self.startTime > 750:
                 self.started = False
                 super().reset()
 
 
     def draw(self,root):
         super().draw(root)
-        if self.ended or self.started:
-            root.blit(self.blackOut,(0,self.blackOuty-1000))
+        if self.ended:
+            root.blit(self.transitionFrames[self.index],(0,self.transitionY-1000))
+        if self.started:
+            root.blit(self.fadeOut,(0,0))
 
     def reset(self):
         super().reset()
@@ -79,3 +92,101 @@ class levelScene(scene):
         self.ended = False
         self.endTime = 1
         self.startTime = 1 
+
+
+class mainScene(scene):
+
+    def __init__(self,objects):
+        super().__init__(objects)
+        self.ended = False
+
+        self.blackout = pygame.Surface((800,600))
+        self.blackout.fill((0,0,0))
+        self.blackout.set_alpha(0)
+
+        self.time = 0
+
+    def update(self,dtime):
+
+        if not self.ended:
+            super().update(dtime)
+            for obj in self.objects:
+                if type(obj).__name__ == 'startbutton':
+                    if obj.clicked:
+                        self.ended = True
+
+        else:
+            super().update(dtime)
+            if self.time < 1000:
+                self.time += dtime
+                self.blackout.set_alpha((255/1000)*self.time)
+            else:
+                s.changeScene(s.scenes['Level Select'])
+
+    def draw(self,root):
+        super().draw(root)
+        if self.ended:
+            root.blit(self.blackout,(0,0))
+
+    def reset(self):
+        super().reset()
+        self.ended = False
+        self.time = 0
+
+
+class levelSelectScene(scene):
+    
+    started = True
+    ended = False
+    startTime = 0
+    endTime = 0
+
+    def __init__(self,objects):
+        super().__init__(objects)
+
+        self.blackOut = pygame.Surface((800,600))
+        self.blackOut.fill((0,0,0))
+        self.blackOut.set_alpha(0)
+
+        self.level = 0
+
+    def update(self,dtime):
+
+        super().update(dtime)
+
+        if not self.started and not self.ended:
+            for obj in self.objects:
+                if type(obj).__name__ == 'levelButton':
+                    if obj.clicked:
+                        self.ended = True
+                        self.level = obj.level
+
+        elif self.started:
+            self.startTime += dtime
+
+            self.blackOut.set_alpha(255-(255/1000)*self.startTime)
+
+            if self.startTime > 1000:
+                self.started = False
+
+        else:
+            self.endTime += dtime
+
+            self.blackOut.set_alpha((255/1000)*self.endTime)
+
+            if self.endTime > 1000:
+                s.changeScene(s.scenes[f'level{self.level}'])
+
+    def reset(self):
+        super().reset()
+        self.started = True
+        self.ended = False
+        self.endTime = 0
+        self.startTime = 0
+        self.level = 0
+        self.blackOut.set_alpha(0)
+
+    def draw(self,root):
+        super().draw(root)
+        root.blit(self.blackOut,(0,0))
+            

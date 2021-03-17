@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="80" height="60" tilewidth="10" tileheight="10" infinite="0" nextlayerid="4" nextobjectid="12">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="80" height="60" tilewidth="10" tileheight="10" infinite="0" nextlayerid="4" nextobjectid="26">
  <tileset firstgid="1" source="entities.tsx"/>
  <objectgroup id="2" name="objects">
   <object id="4" x="0" y="540">
    <polygon points="0,0 0,60 800,60 800,0"/>
   </object>
-  <object id="8" type="flag" gid="1" x="700" y="540" width="40" height="40"/>
+  <object id="8" type="flag" gid="1" x="510" y="130" width="40" height="40" rotation="180"/>
+  <object id="20" type="gravPortal" x="320" y="460">
+   <properties>
+    <property name="angle" type="int" value="90"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="23" x="0" y="540">
+   <polygon points="0,0 200,0 200,-540 0,-540 0,0"/>
+  </object>
+  <object id="24" x="200" y="90">
+   <polygon points="0,0 600,0 600,-90 0,-90"/>
+  </object>
+  <object id="25" type="gravPortal" x="320" y="200">
+   <properties>
+    <property name="angle" type="int" value="180"/>
+   </properties>
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="3"/>
 </map>

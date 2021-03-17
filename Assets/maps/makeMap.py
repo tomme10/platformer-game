@@ -21,8 +21,6 @@ def main(args):
             yies = [obj.points[i][1] for i in range(4)]
             center = (sum(xies)/len(xies),sum(yies)/len(yies))
 
-            pygame.draw.circle(surf,color,center,1)
-
             p = []
             for point in obj.points:
                 p.append(list(point))
@@ -36,7 +34,7 @@ def main(args):
                 if point[1] > center[1]:
                     point[1] -= 4
                 else:
-                    point[1] += 4
+                    point[1] += 3
 
             pygame.draw.polygon(surf,color,p,9)
             

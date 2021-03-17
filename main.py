@@ -26,7 +26,6 @@ def main(args):
 
     while True:
         fps = font.render(str(fps),True,(255,255,255))
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return

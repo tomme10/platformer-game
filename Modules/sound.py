@@ -8,6 +8,7 @@ class sound(object):
         self.channel = channel
 
         s.play(self.sound,self.channel,loops = -1)
+        s.setVolume(self.channel,1000)
 
     def reset(self):
         s.play(self.sound,self.channel,loops = -1)

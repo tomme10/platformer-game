@@ -30,14 +30,22 @@ class button(clickable):
         root.blit(self.surf,self.rect)
 
 class startbutton(button):
+    
+    clicked = False
+
     def onClick(self,dtime,objects):
-        s.changeScene(s.scenes['Level Select'])
+        self.clicked = True
+
+    def reset(self):
+        self.clicked = False
 
 class returnButton(button):
     def onClick(self,dtime,objects):
         s.changeScene(s.scenes['Main'])
 
 class levelButton(button):
+
+    clicked = False
 
     def __init__(self,pos,level):
         self.level = level
@@ -85,7 +93,12 @@ class levelButton(button):
 
     def onClick(self,dtime,objects):
         if not self.locked:
-            s.changeScene(s.scenes[f'level{self.level}'])
+            self.clicked = True
+            #s.changeScene(s.scenes[f'level{self.level}'])
+
+    def reset(self):
+        self.clicked = False
+        self.locked =  self.level > s.level
 
 class testButton(button):
 
@@ -94,3 +107,13 @@ class testButton(button):
 
     def onRelease(self,dtime,objects):
         print('release')
+
+class resetButton(button):
+
+    clicked = False
+
+    def onClick(self,dtime,objects):
+        self.clicked = True
+
+    def reset(self):
+        self.clicked = False
