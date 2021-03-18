@@ -18,7 +18,7 @@ scenes = {
 }
 currentScene = None
 
-level = 1
+level = 8
 
 pygame.init()
 rt = pygame.display.set_mode((800,600))
@@ -49,8 +49,8 @@ def loadAssets():
 
     buttons = [levelButton((80*i+25+80,300),i+1) for i in range(8)]
 
-    scenes['Main'] = mainScene([animation(mainMenuAnimations,100),startbutton(playButton,(400,300),playHover),sound(wind)])
-    scenes['Level Select'] = levelSelectScene([img(levelImg),returnButton(returnArrow,(50,50)),sound(wind),sound(whiteNoise,1)]+buttons)
+    scenes['Main'] = mainScene([animation(mainMenuAnimations,100),startbutton(playButton,(400,300),playHover),sound(wind),sound(pinkNoise,1,0.1)])
+    scenes['Level Select'] = levelSelectScene([img(levelImg),returnButton(returnArrow,(50,50)),sound(wind)]+buttons)
 
     loadLevel(1)
     loadLevel(2)
@@ -80,6 +80,8 @@ def loadLevel(num,next = True):
             objects.append(orb((obj.x,obj.y)))
         elif obj.type == 'gravPortal':
             objects.append(portal((obj.x,obj.y),obj.angle))
+        elif obj.type == 'player':
+            p = player(obj.x,obj.y)
         elif obj.type == None:
             objects.append(wall(list(obj.points)))
 

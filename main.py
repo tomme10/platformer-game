@@ -38,7 +38,8 @@ def main(args):
         s.currentScene.update(dtime)
 
         s.currentScene.draw(root)
-        root.blit(fps,(0,0))
+        if fpsShown:
+            root.blit(fps,(0,0))
 
         pygame.display.update()
         dtime = clock.tick(FPS)

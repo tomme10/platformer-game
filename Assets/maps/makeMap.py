@@ -37,6 +37,13 @@ def main(args):
                     point[1] += 3
 
             pygame.draw.polygon(surf,color,p,9)
+
+        if obj.type == 'gravPortal':
+            pts = obj.x,obj.y
+            pts2 = list(pts)
+            pts2[0] += sin(radians(obj.angle+90))*100
+            pts2[1] += cos(radians(obj.angle+90))*100
+            pygame.draw.line(surf,(255,0,0),pts,pts2,3) 
             
 
     pygame.image.save(surf,'out.png')

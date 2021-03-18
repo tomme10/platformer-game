@@ -25,13 +25,16 @@ class orb(object):
             self.time = 0
             self.index %= len(self.frames)
 
-        if randint(1,2) == 1:
+        if randint(1,4) == 1:
             self.spits.append(spit(self.rect.center,radians(randint(0,360*10)/10)))
 
         for i,s in reversed(list(enumerate(self.spits))):
             s.update(dtime,objects)
             if s.dead:
-                del self.spits[i]
+                try:
+                    del self.spits[i]
+                except IndexError:
+                    print(i)
         
 
     def draw(self,root):
@@ -50,7 +53,7 @@ class spit(object):
         self.frames = [pygame.image.load(f'Assets\\spit\\spit{i+1}.png') for i in range(5)]
         self.index = 0
         self.time = 0
-        self.vel = [sin(angle)*10,cos(angle)*10]
+        self.vel = [sin(angle)*0.5,cos(angle)*0.5]
         self.rect = self.frames[0].get_rect()
         self.rect.center = pos
 
@@ -69,7 +72,7 @@ class spit(object):
         if len(self.trail) > 5:
             del self.trail[0]
 
-        self.rect.move_ip(self.vel[0],self.vel[1])
+        self.rect.move_ip(self.vel[0]*dtime,self.vel[1]*dtime)
 
         colliders = [obj for obj in objects if obj.collisions and obj != self]
 
@@ -79,7 +82,6 @@ class spit(object):
                     s.currentScene.reset()
                 else:
                     self.dead = True
-
 
 
         if not self.rect.colliderect(screen):

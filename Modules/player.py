@@ -3,6 +3,7 @@ import pygame
 from math import floor,ceil,sin,cos,sqrt,radians,degrees
 import numpy as np
 from Modules.collision import *
+import Modules.scenes as s
 
 jheight = 500
 
@@ -117,11 +118,10 @@ class player(object):
             self.pts[i][0] += self.x
             self.pts[i][1] += self.y
 
-        # object interactions
-        #for obj in objects:
-        #    if type(obj).__name__ == 'orb':
-        #        for spit in orb.spits:
-        #            if rect2rect(spit)
+        
+        if not self.rect.colliderect(pygame.Rect(0,0,800,600)):
+            s.currentScene.reset()
+    
 
 
     def collide(self,x,y,colliders):

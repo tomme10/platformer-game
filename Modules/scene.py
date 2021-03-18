@@ -1,5 +1,6 @@
 import pygame
 import Modules.scenes as s
+import Modules.bgSound as sound
 
 
 class scene:
@@ -58,7 +59,7 @@ class levelScene(scene):
                         self.reset()
 
         elif self.ended:
-            super().update(0.1)
+            super().update(0.001)
             self.endTime += dtime
             self.index = (self.endTime//10)%len(self.transitionFrames)
             self.transitionY = (700/1500)*self.endTime
@@ -150,16 +151,22 @@ class levelSelectScene(scene):
 
         self.level = 0
 
+        self.pinkNoise = False
+
     def update(self,dtime):
 
         super().update(dtime)
 
         if not self.started and not self.ended:
+            self.pinkNoise = False
             for obj in self.objects:
                 if type(obj).__name__ == 'levelButton':
                     if obj.clicked:
                         self.ended = True
                         self.level = obj.level
+
+                    elif obj.hover:
+                        self.pinkNoise = True
 
         elif self.started:
             self.startTime += dtime
@@ -176,6 +183,12 @@ class levelSelectScene(scene):
 
             if self.endTime > 1000:
                 s.changeScene(s.scenes[f'level{self.level}'])
+
+        if self.pinkNoise:
+            if not sound.channels[1].get_busy():
+                sound.play(sound.pinkNoise, 1, loops = -1)
+        else:
+            sound.stop(1)
 
     def reset(self):
         super().reset()

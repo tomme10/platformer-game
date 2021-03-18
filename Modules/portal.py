@@ -21,4 +21,5 @@ class portal(object):
                     obj.angle = self.angle
 
     def draw(self,root):
-        pygame.draw.line(root,(0,0,255),self.pts[0],self.pts[1],3)
+        #pygame.draw.line(root,(0,0,255),self.pts[0],self.pts[1],3)
+        pass

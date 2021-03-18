@@ -46,6 +46,7 @@ class returnButton(button):
 class levelButton(button):
 
     clicked = False
+    hover = False
 
     def __init__(self,pos,level):
         self.level = level
@@ -80,6 +81,7 @@ class levelButton(button):
     def onNothing(self,dtime,objects):
         if not self.locked:
             self.surf = self.normal.copy()
+            self.hover = False
 
     def onHover(self,dtime,objects):
         if not self.locked:
@@ -91,6 +93,8 @@ class levelButton(button):
                 self.index += 1
                 self.index %= len(self.hoverFrames)
 
+            self.hover = True
+
     def onClick(self,dtime,objects):
         if not self.locked:
             self.clicked = True
@@ -99,6 +103,7 @@ class levelButton(button):
     def reset(self):
         self.clicked = False
         self.locked =  self.level > s.level
+        self.hover = False
 
 class testButton(button):
 
