@@ -28,9 +28,6 @@ class levelScene(scene):
         self.level = level
         self.next = next
 
-        self.transitionFrames = [pygame.image.load(f'Assets\\corruption\\transition{i+1}.png') for i in range(6)]
-        self.transitionY = 0
-        self.index = 0
         self.ended = False
         self.endTime = 1
 
@@ -61,8 +58,7 @@ class levelScene(scene):
         elif self.ended:
             super().update(0.001)
             self.endTime += dtime
-            self.index = (self.endTime//10)%len(self.transitionFrames)
-            self.transitionY = (700/1500)*self.endTime
+            self.fadeOut.set_alpha((255/1500)*self.endTime)
 
             if self.endTime > 1500:
                 if self.next:
@@ -71,20 +67,17 @@ class levelScene(scene):
                     s.changeScene(s.scenes[f'Main'])
 
         elif self.started:
-            super().update(0.1)
+            super().update(dtime)
             self.startTime += dtime
             self.fadeOut.set_alpha(255-(255/750)*self.startTime)
 
             if self.startTime > 750:
                 self.started = False
-                super().reset()
 
 
     def draw(self,root):
         super().draw(root)
-        if self.ended:
-            root.blit(self.transitionFrames[self.index],(0,self.transitionY-1000))
-        if self.started:
+        if self.started or self.ended:
             root.blit(self.fadeOut,(0,0))
 
     def reset(self):

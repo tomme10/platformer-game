@@ -6,7 +6,7 @@ from Modules.wall import wall
 from Modules.player import player
 from Modules.flag import flag
 from Modules.animation import animation
-from Modules.corruption import orb
+from Modules.corruption import orb,corruptionWall
 import Modules.bgSound as s
 from Modules.sound import sound
 from Modules.bgSound import *
@@ -18,7 +18,7 @@ scenes = {
 }
 currentScene = None
 
-level = 8
+level = 1
 
 pygame.init()
 rt = pygame.display.set_mode((800,600))
@@ -49,7 +49,7 @@ def loadAssets():
 
     buttons = [levelButton((80*i+25+80,300),i+1) for i in range(8)]
 
-    scenes['Main'] = mainScene([animation(mainMenuAnimations,100),startbutton(playButton,(400,300),playHover),sound(wind),sound(pinkNoise,1,0.1)])
+    scenes['Main'] = mainScene([animation(mainMenuAnimations,100),startbutton(playButton,(400,300),playHover),sound(wind),sound(pinkNoise,1,0.2)])
     scenes['Level Select'] = levelSelectScene([img(levelImg),returnButton(returnArrow,(50,50)),sound(wind)]+buttons)
 
     loadLevel(1)
@@ -75,7 +75,7 @@ def loadLevel(num,next = True):
         if obj.type == 'flag':
             objects.append(flag(obj.x,obj.y,obj.rotation))
         elif obj.type == 'img':
-            objects.append(img(obj.image,(obj.x+obj.width//2,obj.y+obj.height//2)))
+            objects.append(img(obj.image,(obj.x+obj.width//2,obj.y+obj.height//2),wh = (int(obj.width),int(obj.height))))
         elif obj.type == 'orb':
             objects.append(orb((obj.x,obj.y)))
         elif obj.type == 'gravPortal':
@@ -86,9 +86,10 @@ def loadLevel(num,next = True):
             objects.append(wall(list(obj.points)))
 
 
-    scenes[f'level{num}'] = levelScene(num,[bg,p,returnButton(returnArrow,(50,50)),resetButton(resetSurf,(800-50,50))]+objects,next)
+    scenes[f'level{num}'] = levelScene(num,[bg,p,returnButton(returnArrow,(50,50)),resetButton(resetSurf,(800-50,50)),corruptionWall(),sound(pinkNoise,1,1)]+objects,next)
 
 
 loadAssets()
 
 currentScene = scenes['Main']
+currentScene.reset()

@@ -14,13 +14,19 @@ draw(root)
 
 
 objects needed:
-player
-wall
-portal
-img
-button
+player - done
+wall - done
+portal - done
+img - done
+button - done
 
 scenes:
-all the levels
-main menu
-level select
+all the levels - wip
+main menu - done
+level select - done
+
+
+things to finish (18/3/21):
+levels!!!!!!!!!!!!
+corruption platform
+better portal texture

@@ -4,6 +4,7 @@ from math import floor,ceil,sin,cos,sqrt,radians,degrees
 import numpy as np
 from Modules.collision import *
 import Modules.scenes as s
+import Modules.bgSound as sound
 
 jheight = 500
 
@@ -24,6 +25,8 @@ class player(object):
         self.surf = self.orisurf.copy()
         self.x,self.y = x,y
         self.vel = [0,0]
+
+        self.dist = 1000
 
         self.oripos = [self.x,self.y]
         self.oriAngle = angle
@@ -121,6 +124,26 @@ class player(object):
         
         if not self.rect.colliderect(pygame.Rect(0,0,800,600)):
             s.currentScene.reset()
+
+        minDist = 300
+
+        for obj in objects:
+            if type(obj).__name__ == 'orb':
+                for spit in obj.spits:
+                    dst = sqrt((self.x-spit.rect.centerx)**2+(self.y-spit.rect.centery)**2)
+                    if dst < minDist:
+                        minDist = dst
+
+            elif type(obj).__name__ == 'corruptionWall':
+                dst = abs(self.y-obj.rect.bottom)
+                if dst < minDist:
+                    minDist = dst
+
+        sound.setVolume(1, (1-minDist/300)/2)
+
+        if minDist < 2:
+            s.currentScene.reset()
+
     
 
 
@@ -139,10 +162,8 @@ class player(object):
 
         for collider in colliders:
             if rect2rect(points,collider.pts):
-                del points,v,x,y
                 return True
         
-        del points,v,x,y
         return False
 
     def draw(self,root):

@@ -94,3 +94,49 @@ class spit(object):
             root.blit(img[0],img[1])
             #pygame.draw.rect(root,(255,0,0), (img[1], img[0].get_size()),3)
 
+
+class corruptionWall(object):
+    drawOrder = 2
+    def __init__(self,time = 10000):
+        self.frames = [pygame.image.load(f'Assets\\corruption\\transition{i+1}.png') for i in range(6)]
+        self.y = 0
+        self.rect = self.frames[0].get_rect()
+        self.rect.centerx = 400
+        self.rect.bottom = self.y
+        self.time = 0
+        self.endTime = time
+        self.transitionTime = 0
+
+        self.pts = [self.rect.topleft,self.rect.topright,(self.rect.right,self.rect.bottom+25),(self.rect.left,self.rect.bottom+25)]
+
+        self.ind = 0
+
+    def update(self,dtime,objects):
+        self.time += dtime
+        if self.time > self.endTime:
+            self.transitionTime += dtime
+            self.y = (600/5000)*self.transitionTime
+        else:
+            self.y = -1000
+
+        if 0 < self.time%100 < 20:
+            self.ind += 1
+            self.ind %= len(self.frames)
+
+        self.rect.bottom = self.y
+
+        self.pts = [self.rect.topleft,self.rect.topright,(self.rect.right,self.rect.bottom+25),(self.rect.left,self.rect.bottom+25)]
+
+    def draw(self,root):
+        root.blit(self.frames[self.ind],self.rect)
+        pygame.draw.polygon(root,(255,0,0),self.pts,3)
+
+    def reset(self):
+        self.y = 0
+        self.rect.bottom = self.y
+        self.time = 0
+        self.transitionTime = 0
+
+class platform(object):
+    def __init__(self,points):
+        self.pts = points.copy()
