@@ -6,7 +6,7 @@ from Modules.wall import wall
 from Modules.player import player
 from Modules.flag import flag
 from Modules.animation import animation
-from Modules.corruption import orb,corruptionWall
+from Modules.corruption import orb,corruptionWall,flames
 import Modules.bgSound as s
 from Modules.sound import sound
 from Modules.bgSound import *
@@ -27,6 +27,7 @@ def changeScene(scene):
     global currentScene
     s.stopAll()
     currentScene = scene
+    currentScene.reset()
     currentScene.reset()
 
 
@@ -53,9 +54,6 @@ def loadAssets():
     scenes['Level Select'] = levelSelectScene([img(levelImg),returnButton(returnArrow,(50,50)),sound(wind)]+buttons)
 
     loadLevel(1)
-    loadLevel(2)
-    loadLevel(3)
-    loadLevel(4,False)
 
 
 def loadLevel(num,next = True):
@@ -82,6 +80,8 @@ def loadLevel(num,next = True):
             objects.append(portal((obj.x,obj.y),obj.angle))
         elif obj.type == 'player':
             p = player(obj.x,obj.y)
+        elif obj.type == 'flames':
+            objects.append(flames(obj.x,obj.y))
         elif obj.type == None:
             objects.append(wall(list(obj.points)))
 

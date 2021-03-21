@@ -86,6 +86,7 @@ class levelScene(scene):
         self.ended = False
         self.endTime = 1
         self.startTime = 1 
+        sound.play(sound.pinkNoise,1,-1)
 
 
 class mainScene(scene):

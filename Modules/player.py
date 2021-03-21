@@ -139,9 +139,14 @@ class player(object):
                 if dst < minDist:
                     minDist = dst
 
+            if type(obj).__name__ == 'flames':
+                dst = sqrt((self.x-obj.rect.centerx)**2+(self.y-obj.rect.centery)**2)
+                if dst < minDist:
+                    minDist = dst
+
         sound.setVolume(1, (1-minDist/300)/2)
 
-        if minDist < 2:
+        if minDist < 10:
             s.currentScene.reset()
 
     

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="80" height="60" tilewidth="10" tileheight="10" infinite="0" nextlayerid="4" nextobjectid="34">
+ <tileset firstgid="1" source="entities.tsx"/>
+ <objectgroup id="2" name="objects">
+  <object id="4" x="0" y="540">
+   <polygon points="0,0 0,60 800,60 800,0"/>
+  </object>
+  <object id="8" type="flag" gid="1" x="510" y="130" width="40" height="40" rotation="180"/>
+  <object id="20" type="gravPortal" x="320" y="460">
+   <properties>
+    <property name="angle" type="int" value="45"/>
+    <property name="p" type="bool" value="false"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="23" x="0" y="540">
+   <polygon points="0,0 200,0 200,-540 0,-540 0,0"/>
+  </object>
+  <object id="24" x="200" y="90">
+   <polygon points="0,0 600,0 600,-90 0,-90"/>
+  </object>
+  <object id="25" type="gravPortal" x="320" y="200">
+   <properties>
+    <property name="angle" type="int" value="180"/>
+    <property name="p" type="bool" value="false"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="26" type="img" gid="3" x="530" y="410" width="230" height="98.5714"/>
+ </objectgroup>
+ <objectgroup id="3">
+  <object id="27" type="flames" gid="4" x="510" y="540" width="20" height="20"/>
+  <object id="28" type="flames" gid="4" x="490" y="540" width="20" height="20"/>
+  <object id="29" type="flames" gid="4" x="470" y="540" width="20" height="20"/>
+  <object id="30" type="flames" gid="4" x="530" y="540" width="20" height="20"/>
+  <object id="31" type="flames" gid="4" x="550" y="540" width="20" height="20"/>
+  <object id="32" type="flames" gid="4" x="570" y="540" width="20" height="20"/>
+  <object id="33" type="flames" gid="4" x="590" y="540" width="20" height="20"/>
+ </objectgroup>
+</map>

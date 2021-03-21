@@ -137,6 +137,21 @@ class corruptionWall(object):
         self.time = 0
         self.transitionTime = 0
 
-class platform(object):
-    def __init__(self,points):
-        self.pts = points.copy()
+class flames(object):
+    def __init__(self,x,y):
+        self.frames = [pygame.image.load(f'Assets\\flames\\flames{i+1}.png') for i in range(7)]
+        self.index = randint(0,6)
+        self.time = 0
+        self.rect = self.frames[0].get_rect()
+        self.rect.topleft = (x,y)
+
+    def update(self,dtime,objects):
+        
+        self.time += dtime
+        if self.time > 100:
+            self.time -= 100
+            self.index += 1
+            self.index %= len(self.frames)
+
+    def draw(self,root):
+        root.blit(self.frames[self.index],self.rect)
