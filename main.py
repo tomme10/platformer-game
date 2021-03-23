@@ -9,6 +9,10 @@ root = pygame.display.set_mode(dis)
 clock = pygame.time.Clock()
 FPS = 60
 
+pygame.display.set_caption('Gravity')
+iconFrames = [pygame.image.load(f'Assets\\spit\\spit{i+1}.png') for i in range(5)]
+pygame.display.set_icon(iconFrames[0])
+
 r = pygame.Surface((50,50))
 r.fill((255,0,0))
 
@@ -23,8 +27,11 @@ def main(args):
     fpsShown = False
 
     dtime = 1
+    iconIndex = 0
+    time = 0
 
     while True:
+        time += dtime
         fps = font.render(str(fps),True,(255,255,255))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -36,6 +43,16 @@ def main(args):
                     fpsShown = not fpsShown
            
         s.currentScene.update(dtime)
+
+        if time > 100:
+            time -= 100
+            iconIndex += 1
+            iconIndex %= len(iconFrames)
+
+            pygame.display.set_icon(iconFrames[iconIndex])
+
+        root.fill((0,0,0))
+
 
         s.currentScene.draw(root)
         if fpsShown:

@@ -8,10 +8,12 @@ import Modules.scenes as s
 screen = pygame.Rect(0,0,800,600)
 
 class orb(object):
-    def __init__(self,pos):
+    def __init__(self,pos,chance = 3):
         self.frames = [pygame.image.load(f'Assets\\orb\\corruptedOrb{i+1}.png') for i in range(6)]
         self.index = 0
         self.time = 0
+
+        self.chance = chance
 
         self.rect = self.frames[0].get_rect()
         self.rect.topleft = pos
@@ -25,8 +27,8 @@ class orb(object):
             self.time = 0
             self.index %= len(self.frames)
 
-        if randint(1,4) == 1:
-            self.spits.append(spit(self.rect.center,radians(randint(0,360*10)/10)))
+        if randint(1,self.chance) == 1:
+            self.spits.append(spit(self.rect.center,radians(randint(0,360*100)/100)))
 
         for i,s in reversed(list(enumerate(self.spits))):
             s.update(dtime,objects)
@@ -88,11 +90,11 @@ class spit(object):
             self.dead = True
 
     def draw(self,root):
-        root.blit(self.frames[self.index],self.rect)
         for i,img in enumerate(self.trail):
             img[0].set_alpha((255/5)*i)
             root.blit(img[0],img[1])
-            #pygame.draw.rect(root,(255,0,0), (img[1], img[0].get_size()),3)
+
+        root.blit(self.frames[self.index],self.rect)
 
 
 class corruptionWall(object):
@@ -129,7 +131,7 @@ class corruptionWall(object):
 
     def draw(self,root):
         root.blit(self.frames[self.ind],self.rect)
-        pygame.draw.polygon(root,(255,0,0),self.pts,3)
+        #pygame.draw.polygon(root,(255,0,0),self.pts,3)
 
     def reset(self):
         self.y = 0

@@ -1,5 +1,5 @@
 from Modules.object import object
-from math import sqrt
+from math import sqrt,sin,cos,radians
 import pygame
 
 class flag(object):
@@ -9,6 +9,8 @@ class flag(object):
     def __init__(self,x,y,angle):
         self.x = x
         self.y = y
+        self.x -= sin(radians(angle))
+        self.y -= cos(radians(angle))
         self.cx = x+20
         self.cy = y+20
 

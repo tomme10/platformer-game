@@ -3,8 +3,6 @@ pygame.mixer.init()
 
 channels = [pygame.mixer.Channel(i) for i in range(5)]
 
-wind = pygame.mixer.Sound('Assets\\sounds\\wind.wav')
-whiteNoise = pygame.mixer.Sound('Assets\\sounds\\whiteNoise.wav')
 pinkNoise = pygame.mixer.Sound('Assets\\sounds\\pinkNoise.wav')
 
 def play(sound,channel,loops = 0):

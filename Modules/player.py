@@ -135,7 +135,7 @@ class player(object):
                         minDist = dst
 
             elif type(obj).__name__ == 'corruptionWall':
-                dst = abs(self.y-obj.rect.bottom)
+                dst = abs(self.y-obj.rect.bottom-10)
                 if dst < minDist:
                     minDist = dst
 
@@ -145,6 +145,9 @@ class player(object):
                     minDist = dst
 
         sound.setVolume(1, (1-minDist/300)/2)
+        if not sound.channels[1].get_busy():
+            sound.play(sound.pinkNoise,1,-1)
+
 
         if minDist < 10:
             s.currentScene.reset()

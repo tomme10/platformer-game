@@ -150,19 +150,18 @@ class levelSelectScene(scene):
     def update(self,dtime):
 
         super().update(dtime)
+        
+        self.pinkNoise = False
+        for obj in self.objects:
+            if type(obj).__name__ == 'levelButton':
+                if obj.clicked:
+                    self.ended = True
+                    self.level = obj.level
 
-        if not self.started and not self.ended:
-            self.pinkNoise = False
-            for obj in self.objects:
-                if type(obj).__name__ == 'levelButton':
-                    if obj.clicked:
-                        self.ended = True
-                        self.level = obj.level
+                elif obj.hover:
+                    self.pinkNoise = True
 
-                    elif obj.hover:
-                        self.pinkNoise = True
-
-        elif self.started:
+        if self.started:
             self.startTime += dtime
 
             self.blackOut.set_alpha(255-(255/1000)*self.startTime)
@@ -170,7 +169,7 @@ class levelSelectScene(scene):
             if self.startTime > 1000:
                 self.started = False
 
-        else:
+        elif self.ended:
             self.endTime += dtime
 
             self.blackOut.set_alpha((255/1000)*self.endTime)

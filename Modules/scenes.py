@@ -50,10 +50,17 @@ def loadAssets():
 
     buttons = [levelButton((80*i+25+80,300),i+1) for i in range(8)]
 
-    scenes['Main'] = mainScene([animation(mainMenuAnimations,100),startbutton(playButton,(400,300),playHover),sound(wind),sound(pinkNoise,1,0.2)])
-    scenes['Level Select'] = levelSelectScene([img(levelImg),returnButton(returnArrow,(50,50)),sound(wind)]+buttons)
+    scenes['Main'] = mainScene([animation(mainMenuAnimations,100),startbutton(playButton,(400,300),playHover),sound(pinkNoise,1,0.2)])
+    scenes['Level Select'] = levelSelectScene([img(levelImg),returnButton(returnArrow,(50,50))]+buttons)
 
     loadLevel(1)
+    loadLevel(2)
+    loadLevel(3)
+    loadLevel(4)
+    loadLevel(5)
+    loadLevel(6)
+    loadLevel(7)
+    loadLevel(8,False)
 
 
 def loadLevel(num,next = True):
@@ -75,7 +82,7 @@ def loadLevel(num,next = True):
         elif obj.type == 'img':
             objects.append(img(obj.image,(obj.x+obj.width//2,obj.y+obj.height//2),wh = (int(obj.width),int(obj.height))))
         elif obj.type == 'orb':
-            objects.append(orb((obj.x,obj.y)))
+            objects.append(orb((obj.x,obj.y),obj.chance))
         elif obj.type == 'gravPortal':
             objects.append(portal((obj.x,obj.y),obj.angle))
         elif obj.type == 'player':
